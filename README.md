@@ -67,5 +67,22 @@ public/css/style.css        tema
 bookstore.sql               ekspor database
 ```
 
+<<<<<<< HEAD
 ## Menambah admin
 Admin tidak bisa dibuat lewat registrasi. Daftarkan akun biasa, lalu ubah kolom `role` menjadi `admin` di phpMyAdmin (tabel `users`).
+=======
+## Upload ke GitHub
+```
+cd bookstore
+git init
+git add .
+git commit -m "BookStore Laravel"
+git branch -M main
+git remote add origin https://github.com/USERNAME/bookstore.git
+git push -u origin main
+```
+(`vendor` dan `.env` otomatis diabaikan oleh `.gitignore`.) Jangan lupa sertakan `bookstore.sql` di repo.
+
+## Portofolio
+https://muhammadaditia433.github.io/muhamadaditia/
+>>>>>>> 3f2c9f419b65da47f20355b5ab140a2696da210a
