@@ -83,4 +83,4 @@ git push -u origin main
 (`vendor` dan `.env` otomatis diabaikan oleh `.gitignore`.) Jangan lupa sertakan `bookstore.sql` di repo.
 
 ## Portofolio
- https://muhammadaditia433.github.io/muhamadaditia/
+https://muhammadaditia433.github.io/muhamadaditia/
