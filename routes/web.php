@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController, HomeController, CartController, CheckoutController, ContactController};
+use App\Http\Controllers\{AuthController, HomeController, CartController, CheckoutController, ContactController, ProfileController};
 use App\Http\Controllers\Admin\{DashboardController, CategoryController, BookController, UserController, OrderController, MessageController};
 
 // ---------- Publik ----------
@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [CheckoutController::class, 'history'])->name('orders.index');
     Route::get('/orders/{order}', [CheckoutController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/proof', [CheckoutController::class, 'uploadProof'])->name('orders.proof');
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

@@ -18,6 +18,7 @@
         <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'on' : '' }}">Pesan Masuk</a>
         <hr style="border-color:#374151">
         <a href="{{ route('home') }}">Lihat Toko</a>
+        <a href="{{ route('profile.show') }}">Profil Saya</a>
         <form method="POST" action="{{ route('logout') }}">@csrf<button class="link" style="padding:8px 10px;color:#d1d5db">Logout</button></form>
     </aside>
     <section class="main">

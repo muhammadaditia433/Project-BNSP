@@ -4,25 +4,28 @@
 <h1>Checkout</h1>
 <div class="card">
     @foreach ($items as $i)
-        <div class="row" style="justify-content:space-between"><span>{{ $i->book->title }} x {{ $i->qty }}</span><span>Rp {{ number_format($i->qty * $i->book->price, 0, ',', '.') }}</span></div>
+        <div class="row" style="justify-content:space-between;padding:6px 0"><span>{{ $i->book->title }} <span class="mut">x {{ $i->qty }}</span></span><span>Rp {{ number_format($i->qty * $i->book->price, 0, ',', '.') }}</span></div>
     @endforeach
-    <hr><b>Total: <span class="price">Rp {{ number_format($total, 0, ',', '.') }}</span></b>
+    <hr>
+    <div class="row" style="justify-content:space-between"><b>Total</b><b class="price">Rp {{ number_format($total, 0, ',', '.') }}</b></div>
 </div>
-<form method="POST" action="{{ route('checkout.store') }}" class="card form">
+
+<form method="POST" action="{{ route('checkout.store') }}" class="card">
     @csrf
-    <label>Alamat pengiriman lengkap</label>
+    <label style="margin-top:0">Alamat pengiriman lengkap</label>
     <textarea name="address" rows="4" required>{{ old('address') }}</textarea>
 
     <label>Metode pembayaran</label>
-    <label style="font-weight:400">
-        <input type="radio" name="payment_method" value="qris" style="width:auto" @checked(old('payment_method', 'qris') === 'qris')>
-        QRIS (scan lalu upload bukti bayar)
-    </label>
-    <label style="font-weight:400">
-        <input type="radio" name="payment_method" value="cod" style="width:auto" @checked(old('payment_method') === 'cod')>
-        COD (bayar saat buku diterima)
-    </label>
-
-    <p><button class="btn green">Buat Pesanan</button></p>
+    <div class="pay-grid">
+        <label class="pay-opt">
+            <input type="radio" name="payment_method" value="qris" @checked(old('payment_method', 'qris') === 'qris')>
+            <span><b>QRIS</b><small>Scan, bayar, lalu upload bukti</small></span>
+        </label>
+        <label class="pay-opt">
+            <input type="radio" name="payment_method" value="cod" @checked(old('payment_method') === 'cod')>
+            <span><b>COD</b><small>Bayar tunai saat buku diterima</small></span>
+        </label>
+    </div>
+    <button class="btn green">Buat Pesanan</button>
 </form>
 @endsection

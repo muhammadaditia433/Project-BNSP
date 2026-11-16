@@ -18,25 +18,23 @@
 @if ($order->payment_method === 'qris' && in_array($order->status, ['pending', 'verifying']))
 <div class="card">
     <h3>Pembayaran QRIS</h3>
-    <p>Scan QRIS di bawah, bayar sebesar <b>Rp {{ number_format($order->total, 0, ',', '.') }}</b>, lalu unggah foto bukti pembayaran.</p>
-
-    @if (file_exists(public_path('images/qris.png')))
-        <img src="{{ asset('images/qris.png') }}" alt="QRIS" style="max-width:280px;border:1px solid #e5e7eb;border-radius:8px">
-    @else
-        <p class="mut">(Gambar QRIS belum dipasang. Taruh file di public/images/qris.png)</p>
-    @endif
-
-    @if ($order->payment_proof)
-        <p>Bukti yang sudah dikirim:</p>
-        <img src="{{ asset('storage/'.$order->payment_proof) }}" alt="Bukti" style="max-width:240px;border:1px solid #e5e7eb;border-radius:8px">
-        <p class="mut">Menunggu verifikasi admin. Kamu bisa mengirim ulang bukti jika salah.</p>
-    @endif
-
-    <form method="POST" action="{{ route('orders.proof', $order) }}" enctype="multipart/form-data">
-        @csrf
-        <input type="file" name="proof" accept="image/*" required>
-        <p><button class="btn green">Kirim Bukti Pembayaran</button></p>
-    </form>
+    <p>Scan QRIS, bayar sebesar <b>Rp {{ number_format($order->total, 0, ',', '.') }}</b>, lalu unggah foto bukti pembayaran.</p>
+    <div class="qris">
+        <img class="qr" alt="QRIS" src="{{ asset(file_exists(public_path('images/qris.png')) ? 'images/qris.png' : 'images/qris-contoh.png') }}">
+        <div>
+            @if ($order->payment_proof)
+                <p><b>Bukti yang sudah dikirim:</b></p>
+                <img class="proof" src="{{ asset('storage/'.$order->payment_proof) }}" alt="Bukti pembayaran">
+                <p class="mut">Menunggu verifikasi admin. Kamu bisa mengirim ulang bukti jika salah.</p>
+            @endif
+            <form method="POST" action="{{ route('orders.proof', $order) }}" enctype="multipart/form-data">
+                @csrf
+                <label style="margin-top:0">Foto bukti pembayaran</label>
+                <input type="file" name="proof" accept="image/*" required>
+                <p><button class="btn green">Kirim Bukti Pembayaran</button></p>
+            </form>
+        </div>
+    </div>
 </div>
 @elseif ($order->payment_method === 'cod' && $order->status === 'pending')
 <div class="card">
@@ -45,5 +43,5 @@
 </div>
 @endif
 
-<a href="{{ route('orders.index') }}">&larr; Kembali</a>
+<a href="{{ route('orders.index') }}">&larr; Kembali ke pesanan</a>
 @endsection

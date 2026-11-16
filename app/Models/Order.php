@@ -20,14 +20,4 @@ class Order extends Model
         }
         $this->update(['status' => 'cancelled']);
     }
-
-    /** Terapkan status dari Midtrans (callback / cek status). */
-    public function applyMidtransStatus(?string $status, ?string $fraud = null): void
-    {
-        if (in_array($status, ['capture', 'settlement']) && $fraud !== 'challenge') {
-            if ($this->status === 'pending') $this->update(['status' => 'paid']);
-        } elseif (in_array($status, ['cancel', 'expire', 'deny'])) {
-            $this->cancel();
-        }
-    }
 }

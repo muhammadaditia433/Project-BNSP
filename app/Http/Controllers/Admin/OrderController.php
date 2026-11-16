@@ -20,20 +20,15 @@ class OrderController extends Controller
 
     public function update(Request $r, Order $order)
     {
-        $status = $r->validate([
-            'status' => 'required|in:pending,verifying,paid,shipped,done,cancelled',
-        ])['status'];
-
+        $status = $r->validate(['status' => 'required|in:pending,verifying,paid,shipped,done,cancelled'])['status'];
         if ($order->status === 'cancelled') {
             return back()->withErrors(['status' => 'Pesanan yang sudah dibatalkan tidak dapat diubah.']);
         }
-
         if ($status === 'cancelled') {
             $order->cancel(); // stok dikembalikan
         } else {
             $order->update(['status' => $status]);
         }
-
         return back()->with('ok', 'Status pesanan diperbarui.');
     }
 }

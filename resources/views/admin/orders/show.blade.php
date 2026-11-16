@@ -10,8 +10,7 @@
     @if ($order->payment_proof)
         <p><b>Bukti pembayaran:</b></p>
         <a href="{{ asset('storage/'.$order->payment_proof) }}" target="_blank">
-            <img src="{{ asset('storage/'.$order->payment_proof) }}" alt="Bukti pembayaran"
-                 style="max-width:260px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px">
+            <img class="proof" src="{{ asset('storage/'.$order->payment_proof) }}" alt="Bukti pembayaran">
         </a>
     @elseif ($order->payment_method === 'qris')
         <p class="mut">Belum ada bukti pembayaran dari user.</p>

@@ -17,10 +17,9 @@ class AuthController extends Controller
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ]);
-        $user = User::create($data + ['role' => 'user']);
-        Auth::login($user);
-        $r->session()->regenerate();
-        return redirect()->route('home')->with('ok', 'Registrasi berhasil, selamat datang!');
+        User::create($data + ['role' => 'user']);
+
+        return redirect()->route('login')->with('ok', 'Registrasi berhasil. Silakan login.');
     }
 
     public function showLogin() { return view('auth.login'); }

@@ -11,12 +11,16 @@ class Book extends Model
     public function category() { return $this->belongsTo(Category::class); }
     public function orderItems() { return $this->hasMany(OrderItem::class); }
 
+    /**
+     * Alamat gambar cover.
+     * - 'images/...' : gambar bawaan di folder public/images
+     * - lainnya      : hasil upload admin di storage (public/storage)
+     */
     public function getCoverUrlAttribute(): ?string
     {
         if (!$this->cover) return null;
-
         return str_starts_with($this->cover, 'images/')
-            ? asset($this->cover)             // gambar bawaan di public/images
-            : asset('storage/'.$this->cover); // hasil upload admin
+            ? asset($this->cover)
+            : asset('storage/'.$this->cover);
     }
 }

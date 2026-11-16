@@ -1,36 +1,32 @@
-# BookStore - Aplikasi Toko Buku (Laravel + MySQL)
+# BookStore - Toko Buku Online (Laravel 12 + MySQL)
 
-Aplikasi toko buku dengan 2 aktor (Admin dan User). Dibuat dengan Laravel 12 (kompatibel Laravel 11), PHP 8.2, MySQL, HTML/CSS (Blade), dan Midtrans Snap (sandbox).
+Aplikasi toko buku dengan dua role (Admin dan User). Tampilan modern dengan CSS manual (tanpa framework CSS).
 
 ## Fitur
-**Admin**: CRUD Kategori, CRUD Buku (upload cover), daftar user terdaftar, daftar pesanan + ubah status, pesan masuk, dashboard ringkasan.
-**User**: registrasi, login, About Us, hubungi admin, pencarian buku (judul/penulis/kategori), keranjang, checkout, pembayaran via Midtrans (bayar dulu sebelum dikirim), riwayat pesanan.
+**User**: registrasi (setelah daftar diarahkan ke login), login, profil (ubah data dan password), About Us, hubungi admin, cari dan filter buku, keranjang, checkout (QRIS atau COD), upload bukti bayar, riwayat pesanan.
+**Admin**: dashboard, CRUD kategori, CRUD buku (upload cover), daftar user, daftar pesanan + cek bukti bayar + ubah status, pesan masuk.
 
-## Cara Instalasi (Windows + XAMPP)
-
-Syarat: PHP 8.2+, Composer, MySQL berjalan (XAMPP > Start MySQL).
-
-1. Buat projek Laravel kosong:
+## Instalasi (Windows + XAMPP)
+1. Nyalakan **MySQL** di XAMPP. Pastikan `php -v` dan `composer -V` berjalan.
+2. Buat projek Laravel kosong:
    ```
    cd C:\xampp_baru\htdocs\BNSP
-   composer create-project laravel/laravel:^12.0 bookstore
+   composer create-project laravel/laravel:^12.0 bookstore-app
    ```
-2. **Salin SEMUA isi** folder `bookstore_kode` (folder `app`, `bootstrap`, `config`, `database`, `public`, `resources`, `routes`, file `setup.ps1`, `bookstore.sql`) ke dalam folder `bookstore`. Jika ditanya, pilih **Replace / timpa**.
-3. Buat database kosong `bookstore` di http://localhost/phpmyadmin (atau lewati: langkah 4 akan dibuat otomatis jika memakai opsi B).
-4. Pilih salah satu:
-
-   **Opsi A - Migrasi Laravel (disarankan)**
+3. Salin **semua isi** folder `bookstore_kode` (app, bootstrap, database, public, resources, routes, setup.ps1, bookstore.sql) ke `bookstore-app`. Pilih **Replace** jika ditanya.
+   - Jika kamu sudah punya `public/images/qris.png` sendiri, file itu tidak ditimpa (zip hanya berisi `qris-contoh.png`).
+4. Jalankan:
    ```
-   cd bookstore
+   cd bookstore-app
    powershell -ExecutionPolicy Bypass -File setup.ps1
+   php artisan serve
    ```
-   Script ini mengatur `.env`, membuat tabel, mengisi data awal, dan `storage:link`.
+   `setup.ps1` mengatur `.env`, membuat tabel, mengisi data awal, dan `storage:link`. Perintahnya menghapus data lama di database `bookstore`.
+5. Buka http://127.0.0.1:8000
 
-   **Opsi B - Import SQL**: di phpMyAdmin tab *Import*, pilih `bookstore.sql`. Lalu atur `.env` secara manual (lihat bawah) dan jalankan `php artisan key:generate` dan `php artisan storage:link`.
+Alternatif tanpa `setup.ps1`: import `bookstore.sql` lewat phpMyAdmin, atur `.env` (lihat bawah), lalu `php artisan key:generate` dan `php artisan storage:link`.
 
-5. Jalankan: `php artisan serve` lalu buka http://127.0.0.1:8000
-
-### Pengaturan `.env` manual (Opsi B)
+### `.env` penting
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -41,43 +37,35 @@ DB_PASSWORD=
 SESSION_DRIVER=file
 CACHE_STORE=file
 QUEUE_CONNECTION=sync
-MIDTRANS_SERVER_KEY=
-MIDTRANS_CLIENT_KEY=
 ```
 
 ## Akun demo (password: `password`)
-| Peran | Email |
+| Role | Email |
 |---|---|
 | Admin | admin@bookstore.test |
-| User  | user@bookstore.test |
+| User | user@bookstore.test |
 
-## Midtrans (opsional)
-Tanpa key, aplikasi berjalan **mode demo**: tombol "Simulasi Pembayaran" muncul di halaman pesanan.
-Untuk Midtrans sungguhan (sandbox): daftar di https://dashboard.sandbox.midtrans.com, ambil Server Key dan Client Key (Settings > Access Keys), isi di `.env`, lalu `php artisan config:clear`. Setelah membayar di popup Snap, status otomatis dicek lewat tombol/redirect "Cek Status Pembayaran". Untuk notifikasi otomatis (webhook) jalankan `ngrok http 8000` dan isi `https://xxxx.ngrok-free.app/midtrans/callback` di Settings > Payment > Notification URL.
-Kartu uji sandbox: 4811 1111 1111 1114, CVV 123, OTP 112233.
+## Pembayaran
+- **QRIS**: user scan, bayar, lalu unggah foto bukti di halaman pesanan. Status menjadi `verifying`, lalu admin memeriksa bukti dan mengubah status ke `paid`, `shipped`, `done`.
+- **COD**: bayar tunai ke kurir saat buku diterima. Admin memproses ke `shipped` dan `done`.
+- Pasang gambar QRIS milikmu di `public/images/qris.png`. Jika belum ada, aplikasi menampilkan gambar contoh.
+
+## Mengganti cover buku
+Admin: menu Buku, Edit, pilih file di kolom Cover, Simpan. Cover bawaan ada di `public/images/books`.
 
 ## Struktur penting
 ```
-routes/web.php                      semua route
-app/Http/Controllers/               AuthController, HomeController, CartController, CheckoutController, ContactController
-app/Http/Controllers/Admin/         Dashboard, Category, Book, User, Order, Message
+routes/web.php
+app/Http/Controllers/       AuthController, ProfileController, HomeController, CartController, CheckoutController, ContactController
+app/Http/Controllers/Admin/ Dashboard, Category, Book, User, Order, Message
 app/Http/Middleware/AdminMiddleware.php
-app/Models/                         User, Category, Book, CartItem, Order, OrderItem, Message
-database/migrations/                skema database
-database/seeders/DatabaseSeeder.php data awal
-resources/views/                    tampilan Blade (HTML)
-public/css/style.css                CSS
-bookstore.sql                       export database
+app/Models/                 User, Category, Book, CartItem, Order, OrderItem, Message
+database/migrations/        skema database
+database/seeders/           data awal
+resources/views/            tampilan Blade
+public/css/style.css        tema
+bookstore.sql               ekspor database
 ```
 
-## Upload ke GitHub
-```
-cd bookstore
-git init
-git add .
-git commit -m "BookStore Laravel"
-git branch -M main
-git remote add origin https://github.com/USERNAME/bookstore.git
-git push -u origin main
-```
-(`vendor` dan `.env` otomatis diabaikan oleh `.gitignore`.) Jangan lupa sertakan `bookstore.sql` di repo.
+## Menambah admin
+Admin tidak bisa dibuat lewat registrasi. Daftarkan akun biasa, lalu ubah kolom `role` menjadi `admin` di phpMyAdmin (tabel `users`).

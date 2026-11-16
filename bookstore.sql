@@ -69,6 +69,8 @@ CREATE TABLE `orders` (
   `code` VARCHAR(255) NOT NULL,
   `total` INT UNSIGNED NOT NULL,
   `address` TEXT NOT NULL,
+  `payment_method` VARCHAR(255) NOT NULL DEFAULT 'cod',
+  `payment_proof` VARCHAR(255) NULL DEFAULT NULL,
   `status` VARCHAR(255) NOT NULL DEFAULT 'pending',
   `snap_token` TEXT NULL,
   `created_at` TIMESTAMP NULL DEFAULT NULL,
@@ -110,19 +112,19 @@ INSERT INTO `users` (`id`,`name`,`email`,`password`,`role`,`created_at`,`updated
 INSERT INTO `categories` (`id`,`name`,`created_at`,`updated_at`) VALUES
 (1,'Novel',NOW(),NOW()),(2,'Teknologi',NOW(),NOW()),(3,'Pendidikan',NOW(),NOW()),(4,'Anak-anak',NOW(),NOW());
 
-INSERT INTO `books` (`id`,`category_id`,`title`,`author`,`price`,`stock`,`description`,`created_at`,`updated_at`) VALUES
-(1,1,'Laskar Pelangi','Andrea Hirata',89000,19,'Kisah sepuluh anak Belitung yang berjuang menempuh pendidikan.',NOW(),NOW()),
-(2,1,'Bumi Manusia','Pramoedya Ananta Toer',110000,15,'Novel sejarah pertama dari Tetralogi Buru.',NOW(),NOW()),
-(3,1,'Pulang','Tere Liye',85000,12,'Perjalanan Bujang mencari jati diri dan keluarga.',NOW(),NOW()),
-(4,2,'Belajar Laravel untuk Pemula','Tim Pustaka Kode',120000,9,'Panduan membuat aplikasi web dengan Laravel dari nol.',NOW(),NOW()),
-(5,2,'Dasar-dasar MySQL','Rina Wulandari',95000,8,'Perancangan database, query, dan relasi tabel.',NOW(),NOW()),
-(6,3,'Atomic Habits (Edisi Indonesia)','James Clear',105000,23,'Cara membangun kebiasaan baik dan meninggalkan yang buruk.',NOW(),NOW()),
-(7,4,'Kumpulan Dongeng Nusantara','Tim Redaksi',65000,30,'Dongeng rakyat dari berbagai daerah di Indonesia.',NOW(),NOW()),
-(8,4,'Ensiklopedia Hewan','A. Pratama',78000,18,'Mengenal hewan dari seluruh dunia dengan gambar menarik.',NOW(),NOW());
+INSERT INTO `books` (`id`,`category_id`,`title`,`author`,`price`,`stock`,`description`,`cover`,`created_at`,`updated_at`) VALUES
+(1,1,'Laskar Pelangi','Andrea Hirata',89000,19,'Kisah sepuluh anak Belitung yang berjuang menempuh pendidikan.','images/books/laskar-pelangi.png',NOW(),NOW()),
+(2,1,'Bumi Manusia','Pramoedya Ananta Toer',110000,15,'Novel sejarah pertama dari Tetralogi Buru.','images/books/bumi-manusia.png',NOW(),NOW()),
+(3,1,'Pulang','Tere Liye',85000,12,'Perjalanan Bujang mencari jati diri dan keluarga.','images/books/pulang.png',NOW(),NOW()),
+(4,2,'Belajar Laravel untuk Pemula','Tim Pustaka Kode',120000,9,'Panduan membuat aplikasi web dengan Laravel dari nol.','images/books/belajar-laravel.png',NOW(),NOW()),
+(5,2,'Dasar-dasar MySQL','Rina Wulandari',95000,8,'Perancangan database, query, dan relasi tabel.','images/books/dasar-mysql.png',NOW(),NOW()),
+(6,3,'Atomic Habits (Edisi Indonesia)','James Clear',105000,23,'Cara membangun kebiasaan baik dan meninggalkan yang buruk.','images/books/atomic-habits.png',NOW(),NOW()),
+(7,4,'Kumpulan Dongeng Nusantara','Tim Redaksi',65000,30,'Dongeng rakyat dari berbagai daerah di Indonesia.','images/books/dongeng-nusantara.png',NOW(),NOW()),
+(8,4,'Ensiklopedia Hewan','A. Pratama',78000,18,'Mengenal hewan dari seluruh dunia dengan gambar menarik.','images/books/ensiklopedia-hewan.png',NOW(),NOW());
 
-INSERT INTO `orders` (`id`,`user_id`,`code`,`total`,`address`,`status`,`created_at`,`updated_at`) VALUES
-(1,2,'BK-DEMO0001',299000,'Jl. Merdeka No. 10, Sumbawa Besar, NTB','paid',NOW(),NOW()),
-(2,2,'BK-DEMO0002',120000,'Jl. Merdeka No. 10, Sumbawa Besar, NTB','pending',NOW(),NOW());
+INSERT INTO `orders` (`id`,`user_id`,`code`,`total`,`address`,`payment_method`,`status`,`created_at`,`updated_at`) VALUES
+(1,2,'BK-DEMO0001',299000,'Jl. Merdeka No. 10, Sumbawa Besar, NTB','qris','paid',NOW(),NOW()),
+(2,2,'BK-DEMO0002',120000,'Jl. Merdeka No. 10, Sumbawa Besar, NTB','cod','pending',NOW(),NOW());
 
 INSERT INTO `order_items` (`order_id`,`book_id`,`price`,`qty`,`created_at`,`updated_at`) VALUES
 (1,1,89000,1,NOW(),NOW()),(1,6,105000,2,NOW(),NOW()),(2,4,120000,1,NOW(),NOW());
